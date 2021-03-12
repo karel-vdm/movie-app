@@ -11,14 +11,14 @@ import retrofit2.http.Query
 
 interface MovieService {
 
-    @GET("")
+    @GET(".")
     suspend fun getMoviesBySearchTerm(
         @Query("apikey") apikey: String,
         @Query("s") searchTerm: String,
         @Query("page") page: Int
     ): GetMoviesResponseDto
 
-    @GET("")
+    @GET(".")
     suspend fun getMovieById(
         @Query("apikey") apikey: String,
         @Query("i") imdbId: String
@@ -26,7 +26,7 @@ interface MovieService {
 
 
     companion object {
-        private val BASE_URL = "http://www.omdbapi.com/"
+        private val BASE_URL = "https://www.omdbapi.com/"
 
         private var _retrofit: Retrofit? = null
         private val retrofit: Retrofit
