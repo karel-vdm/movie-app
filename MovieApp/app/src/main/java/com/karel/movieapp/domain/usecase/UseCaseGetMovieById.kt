@@ -10,8 +10,8 @@ class UseCaseGetMovieById(
     private val repository: MovieRepository
 ) {
 
-    fun getMovieById(imdbId: String): Flow<MovieEntity> =
-        repository.getMovieById(imdbId).map { response ->
+    fun getMovieById(id: String): Flow<MovieEntity> =
+        repository.getMovieById(id).map { response ->
             TransformerMovieEntity.transform(response)
         }
 

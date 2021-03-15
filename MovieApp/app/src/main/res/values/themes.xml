@@ -12,6 +12,18 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_rectangle</item>
     </style>
 
     <style name="TitleText">
@@ -33,11 +45,22 @@
         <item name="android:gravity">start|center_vertical</item>
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="SubtitleText.Secondary" parent="SubtitleText">
         <item name="android:textColor">@color/secondary_text</item>
+    </style>
+
+    <style name="BodyText">
+        <item name="android:gravity">start|center_vertical</item>
+        <item name="android:maxLines">8</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BodyText.Normal" parent="BodyText">
+        <item name="android:textColor">@color/primary_text</item>
     </style>
 
 </resources>

@@ -20,9 +20,9 @@ class MovieRepositoryImpl(
             emit(movies)
         }.flowOn(Dispatchers.IO)
 
-    override fun getMovieById(imdbId: String): Flow<GetMovieResponseDto> =
+    override fun getMovieById(id: String): Flow<GetMovieResponseDto> =
         flow {
-            val movies = movieService.getMovieById(API_KEY, imdbId)
+            val movies = movieService.getMovieById(API_KEY, id)
             emit(movies)
         }.flowOn(Dispatchers.IO)
 

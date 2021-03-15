@@ -8,5 +8,5 @@ interface MovieRepository {
 
     fun getMoviesBySearchTerm(searchTerm: String, page: Int): Flow<GetMoviesResponseDto>
 
-    fun getMovieById(imdbId: String): Flow<GetMovieResponseDto>
+    fun getMovieById(id: String): Flow<GetMovieResponseDto>
 }

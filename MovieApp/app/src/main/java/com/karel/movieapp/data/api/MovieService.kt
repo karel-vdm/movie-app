@@ -21,7 +21,7 @@ interface MovieService {
     @GET(".")
     suspend fun getMovieById(
         @Query("apikey") apikey: String,
-        @Query("i") imdbId: String
+        @Query("i") id: String
     ): GetMovieResponseDto
 
 
