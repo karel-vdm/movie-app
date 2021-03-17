@@ -54,7 +54,7 @@
 
     <style name="BodyText">
         <item name="android:gravity">start|center_vertical</item>
-        <item name="android:maxLines">8</item>
+        <item name="android:maxLines">5</item>
         <item name="android:ellipsize">end</item>
         <item name="android:textSize">14sp</item>
     </style>

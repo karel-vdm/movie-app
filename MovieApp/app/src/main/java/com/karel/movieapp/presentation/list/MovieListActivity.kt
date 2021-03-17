@@ -1,20 +1,23 @@
-package com.karel.movieapp.presentation.search
+package com.karel.movieapp.presentation.list
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.karel.movieapp.data.api.MovieService
+import com.karel.movieapp.data.database.MovieDatabase
+import com.karel.movieapp.data.repository.MovieRepositoryImpl
 import com.karel.movieapp.databinding.ActivityMainBinding
+import com.karel.movieapp.domain.usecase.*
 import com.karel.movieapp.presentation.detail.MovieDetailFragment
 
-class MainActivity : AppCompatActivity(), IViewMainActivity {
+class MovieListActivity : AppCompatActivity(), IViewMainActivity {
 
     private lateinit var binding: ActivityMainBinding
-
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var viewModel: MovieListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,14 +26,38 @@ class MainActivity : AppCompatActivity(), IViewMainActivity {
         setContentView(view)
 
         initializeView()
+        viewModel.onViewCreated()
+    }
+
+    override fun onStop() {
+        viewModel.onStop()
+        super.onStop()
+    }
+
+    override fun addMoviesToView(movies: List<MovieListItemViewModel>) {
+        (binding.moviesView.adapter as? MovieAdapter)?.addItems(movies)
+    }
+
+    override fun clearMoviesFromView() {
+    }
+
+    override fun renderErrorView(error: String?) {
+    }
+
+    override fun hideErrorView() {
+    }
+
+    override fun renderLoadingView() {
+    }
+
+    override fun hideLoadingView() {
     }
 
     private fun initializeView() {
         initializeSearchView()
         initializeMoviesView()
+        createViewModel()
         observeViewModel()
-
-        //viewModel.getMoviesBySearchTerm("Dragon")
     }
 
     private fun initializeMoviesView() {
@@ -43,10 +70,9 @@ class MainActivity : AppCompatActivity(), IViewMainActivity {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager
                 if (layoutManager is LinearLayoutManager) {
-                    val currentPosition = layoutManager.findLastVisibleItemPosition()
+                    val currentPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
                     viewModel.onScroll(currentPosition)
                 }
-
             }
         })
     }
@@ -54,7 +80,7 @@ class MainActivity : AppCompatActivity(), IViewMainActivity {
     private fun initializeSearchView() {
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                viewModel.getMoviesBySearchTerm(query)
+                viewModel.getMovies(query)
                 return false
             }
 
@@ -62,6 +88,35 @@ class MainActivity : AppCompatActivity(), IViewMainActivity {
                 return false
             }
         })
+    }
+
+    private fun createViewModel() {
+        val database = MovieDatabase.getDatabase(this)
+        val repository = MovieRepositoryImpl(
+            MovieService.create(),
+            database.movieDao()
+        )
+
+        val viewModelFactory = MovieListViewModelFactory(
+            useCaseGetMovies = UseCaseGetMovies(
+                repository = repository
+            ),
+            useCaseCacheCurrentState = UseCaseCacheCurrentState(
+                repository = repository
+            ),
+            useCaseClearSavedState = UseCaseClearSavedState(
+                repository = repository
+            ),
+            useCaseGetSavedState = UseCaseGetSavedState(
+                repository = repository
+            ),
+            useCaseGetMoviesFromCache = UseCaseGetMoviesFromCache(
+                repository = repository
+            )
+        )
+
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MovieListViewModel::class.java)
     }
 
     private fun observeViewModel() {
@@ -84,31 +139,20 @@ class MainActivity : AppCompatActivity(), IViewMainActivity {
                 hideLoadingView()
             }
         })
-    }
 
-    override fun addMoviesToView(movies: List<MovieSearchViewModel>) {
-        (binding.moviesView.adapter as? MovieAdapter)?.addItems(movies)
-    }
+        viewModel.searchTerm.observe(this, Observer { value ->
+            binding.searchView.setQuery(value, false)
+        })
 
-    override fun clearMoviesFromView() {
-    }
-
-    override fun renderErrorView(error: String?) {
-    }
-
-    override fun hideErrorView() {
-    }
-
-    override fun renderLoadingView() {
-    }
-
-    override fun hideLoadingView() {
+        viewModel.scrollPosition.observe(this, Observer { value ->
+            binding.moviesView.scrollToPosition(value)
+        })
     }
 }
 
 interface IViewMainActivity {
 
-    fun addMoviesToView(movies: List<MovieSearchViewModel>)
+    fun addMoviesToView(movies: List<MovieListItemViewModel>)
 
     fun renderErrorView(error: String?)
 

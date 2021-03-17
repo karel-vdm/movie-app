@@ -2,7 +2,7 @@ package com.karel.movieapp.data.api.model
 
 import com.google.gson.annotations.SerializedName
 
-data class SearchDto(
+data class MovieSearchDto(
 
     @SerializedName("Poster")
     val Poster: String? = null,

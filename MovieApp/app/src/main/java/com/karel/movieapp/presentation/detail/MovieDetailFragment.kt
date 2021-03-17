@@ -9,8 +9,13 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.karel.movieapp.data.api.MovieService
+import com.karel.movieapp.data.database.MovieDatabase
+import com.karel.movieapp.data.repository.MovieRepositoryImpl
 import com.karel.movieapp.databinding.MovieDetailBinding
+import com.karel.movieapp.domain.usecase.UseCaseGetMovieById
 
 class MovieDetailFragment : BottomSheetDialogFragment() {
 
@@ -30,13 +35,30 @@ class MovieDetailFragment : BottomSheetDialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        viewModel = ViewModelProvider(this).get(MovieDetailViewModel::class.java)
+        val database = MovieDatabase.getDatabase(context)
+        val viewModelFactory = MovieDetailViewModelFactory(
+            useCaseGetMovieById = UseCaseGetMovieById(
+                MovieRepositoryImpl(
+                    MovieService.create(),
+                    database.movieDao()
+                )
+            )
+        )
+
+        viewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MovieDetailViewModel::class.java)
 
         val id = getMovieIdFromArgs()
         viewModel.getMovieById(id)
         viewModel.movie.observe(this, Observer { response ->
             renderMovieDetail(response)
         })
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val bottomSheetBehavior = BottomSheetBehavior.from(requireView().parent as View)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun renderMovieDetail(viewModel: MovieViewModel) {

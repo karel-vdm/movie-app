@@ -1,7 +1,7 @@
 package com.karel.movieapp.data.api
 
 import com.karel.movieapp.data.api.model.GetMoviesResponseDto
-import com.karel.movieapp.data.api.model.GetMovieResponseDto
+import com.karel.movieapp.data.api.model.GetMovieDetailResponseDto
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -12,17 +12,17 @@ import retrofit2.http.Query
 interface MovieService {
 
     @GET(".")
-    suspend fun getMoviesBySearchTerm(
+    suspend fun getMovies(
         @Query("apikey") apikey: String,
         @Query("s") searchTerm: String,
         @Query("page") page: Int
     ): GetMoviesResponseDto
 
     @GET(".")
-    suspend fun getMovieById(
+    suspend fun getMovieDetail(
         @Query("apikey") apikey: String,
         @Query("i") id: String
-    ): GetMovieResponseDto
+    ): GetMovieDetailResponseDto
 
 
     companion object {

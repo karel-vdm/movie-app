@@ -1,6 +1,6 @@
-package com.karel.movieapp.presentation.search
+package com.karel.movieapp.presentation.list
 
-data class MovieSearchViewModel(
+data class MovieListItemViewModel(
     val id: String = String(),
     val title: String = String(),
     val poster: String = String(),

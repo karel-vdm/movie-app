@@ -2,7 +2,7 @@ package com.karel.movieapp.data.api.model
 
 import com.google.gson.annotations.SerializedName
 
-data class GetMovieResponseDto(
+data class GetMovieDetailResponseDto(
 
     @SerializedName("Actors")
     val Actors: String? = null,
@@ -35,7 +35,7 @@ data class GetMovieResponseDto(
     val Rated: String? = null,
 
     @SerializedName("Ratings")
-    val Ratings: List<RatingDto>? = null,
+    val Ratings: List<MovieRatingDto>? = null,
 
     @SerializedName("Released")
     val Released: String? = null,

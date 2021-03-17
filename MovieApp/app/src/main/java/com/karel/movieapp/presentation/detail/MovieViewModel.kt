@@ -1,11 +1,11 @@
-package com.karel.movieapp.domain.model
+package com.karel.movieapp.presentation.detail
 
-data class MovieEntity(
+data class MovieViewModel(
     val id: String = String(),
     val title: String = String(),
     val poster: String = String(),
-    val type: String = String(),
     val year: String = String(),
+    val type: String = String(),
     val ageRestriction: String = String(),
     val runtime: String = String(),
     val rating: String = String(),

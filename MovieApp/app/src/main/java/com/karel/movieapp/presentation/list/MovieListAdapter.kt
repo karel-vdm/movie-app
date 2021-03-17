@@ -1,32 +1,31 @@
-package com.karel.movieapp.presentation.search
+package com.karel.movieapp.presentation.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.karel.movieapp.databinding.MovieItemBinding
 
 class MovieAdapter(private val onClickListener: (String) -> Unit) :
-    RecyclerView.Adapter<MovieViewHolder>() {
+    RecyclerView.Adapter<MovieListItemViewHolder>() {
 
-    private var items: MutableList<MovieSearchViewModel> = mutableListOf()
+    private var items: MutableList<MovieListItemViewModel> = mutableListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListItemViewHolder {
         val binding: MovieItemBinding = MovieItemBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieViewHolder(binding, onClickListener)
+        return MovieListItemViewHolder(binding, onClickListener)
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: MovieListItemViewHolder, position: Int) {
         holder.onBindView(items[position])
     }
 
-    fun addItems(itemsToAdd: List<MovieSearchViewModel>) {
+    fun addItems(itemsToAdd: List<MovieListItemViewModel>) {
         val diffResult = DiffUtil.calculateDiff(DiffCallback(items, itemsToAdd))
         diffResult.dispatchUpdatesTo(this)
         items.clear()
@@ -34,8 +33,8 @@ class MovieAdapter(private val onClickListener: (String) -> Unit) :
     }
 
     private class DiffCallback(
-        private val oldList: List<MovieSearchViewModel>,
-        private val newList: List<MovieSearchViewModel>
+        private val oldList: List<MovieListItemViewModel>,
+        private val newList: List<MovieListItemViewModel>
     ) : DiffUtil.Callback() {
         override fun getOldListSize(): Int = oldList.size
         override fun getNewListSize(): Int = newList.size
@@ -57,24 +56,3 @@ class MovieAdapter(private val onClickListener: (String) -> Unit) :
 
 }
 
-class MovieViewHolder(
-    private val binding: MovieItemBinding,
-    private val onClickListener: (String) -> Unit
-) : RecyclerView.ViewHolder(binding.root) {
-
-    fun onBindView(viewModel: MovieSearchViewModel) {
-        binding.movieItemTitle.text = viewModel.title
-        binding.movieItemYear.text = viewModel.year
-        binding.movieItemType.text = viewModel.type
-
-        Glide.with(itemView.context)
-            .load(viewModel.poster)
-            .fitCenter()
-            .into(binding.movieItemPoster)
-
-        binding.root.setOnClickListener {
-            onClickListener.invoke(viewModel.id)
-        }
-    }
-
-}

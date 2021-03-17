@@ -100,49 +100,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/movie_item_poster"
         app:layout_constraintTop_toBottomOf="@+id/movie_item_rating_icon" />
-
-    <View
-        android:id="@+id/movie_item_divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/movie_item_poster"
-        android:layout_marginTop="16dp"/>
-
-    <ImageView
-        android:id="@+id/movie_item_favourite"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_favorite"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/movie_item_share"
-        app:layout_constraintTop_toBottomOf="@+id/movie_item_divider"
-        app:tint="@color/white" />
-
-    <ImageView
-        android:id="@+id/movie_item_share"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_share"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/movie_item_favourite"
-        app:layout_constraintEnd_toStartOf="@+id/movie_item_download"
-        app:layout_constraintTop_toBottomOf="@+id/movie_item_divider"
-        app:tint="@color/white" />
-
-    <ImageView
-        android:id="@+id/movie_item_download"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/ic_download"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/movie_item_share"
-        app:layout_constraintTop_toBottomOf="@+id/movie_item_divider"
-        app:tint="@color/white" />
-
+    
 </androidx.constraintlayout.widget.ConstraintLayout>

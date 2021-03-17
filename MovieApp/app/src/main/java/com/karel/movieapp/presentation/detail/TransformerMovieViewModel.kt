@@ -1,12 +1,10 @@
 package com.karel.movieapp.presentation.detail
 
-import com.karel.movieapp.domain.model.MovieEntity
-import com.karel.movieapp.domain.model.MovieSearchEntity
-import com.karel.movieapp.presentation.search.MovieSearchViewModel
+import com.karel.movieapp.domain.model.MovieDetailEntity
 
 object TransformerMovieViewModel {
 
-    fun transform(entity: MovieEntity) = MovieViewModel(
+    fun transform(entity: MovieDetailEntity) = MovieViewModel(
         id = entity.id,
         title = entity.title,
         poster = entity.poster,

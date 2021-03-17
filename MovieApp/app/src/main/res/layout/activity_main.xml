@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_dark"
-    tools:context=".presentation.search.MainActivity">
+    tools:context=".presentation.list.MovieListActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/search_view_toolbar"

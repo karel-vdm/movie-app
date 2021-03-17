@@ -1,6 +1,6 @@
 package com.karel.movieapp.domain.model
 
-data class MovieSearchEntity(
+data class MovieListItemEntity(
     val id: String = String(),
     val title: String = String(),
     val poster: String = String(),
