@@ -5,31 +5,56 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.karel.movieapp.databinding.MovieItemBinding
+import com.karel.movieapp.databinding.MovieItemShimmerBinding
+import com.karel.movieapp.presentation.widget.ViewHolderShimmer
+
+
+private const val MOVIE = 0
+private const val SHIMMER = 1
 
 class MovieAdapter(private val onClickListener: (String) -> Unit) :
-    RecyclerView.Adapter<MovieListItemViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: MutableList<MovieListItemViewModel> = mutableListOf()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieListItemViewHolder {
-        val binding: MovieItemBinding = MovieItemBinding
-            .inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieListItemViewHolder(binding, onClickListener)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+
+        return if (viewType == MOVIE) {
+            val binding: MovieItemBinding = MovieItemBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+            MovieListItemViewHolder(binding, onClickListener)
+        } else {
+            val binding: MovieItemShimmerBinding = MovieItemShimmerBinding
+                .inflate(LayoutInflater.from(parent.context), parent, false)
+            ViewHolderShimmer(binding)
+        }
     }
 
     override fun getItemCount(): Int {
         return items.size
     }
 
-    override fun onBindViewHolder(holder: MovieListItemViewHolder, position: Int) {
-        holder.onBindView(items[position])
+    override fun getItemViewType(position: Int): Int {
+        if (items[position].isInShimmerState) {
+            return SHIMMER
+        }
+        return MOVIE
     }
 
-    fun addItems(itemsToAdd: List<MovieListItemViewModel>) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is MovieListItemViewHolder) {
+            holder.onBindView(items[position])
+        }
+    }
+
+    fun addItems(itemsToAdd: List<MovieListItemViewModel>, isLastPage: Boolean) {
         val diffResult = DiffUtil.calculateDiff(DiffCallback(items, itemsToAdd))
         diffResult.dispatchUpdatesTo(this)
         items.clear()
         items.addAll(itemsToAdd)
+        if (!isLastPage) {
+            items.add(MovieListItemViewModel(isInShimmerState = true))
+        }
     }
 
     private class DiffCallback(
@@ -55,4 +80,3 @@ class MovieAdapter(private val onClickListener: (String) -> Unit) :
     }
 
 }
-

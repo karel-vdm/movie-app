@@ -1,18 +1,22 @@
 package com.karel.movieapp.presentation.list
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.karel.movieapp.data.api.MovieService
 import com.karel.movieapp.data.database.MovieDatabase
 import com.karel.movieapp.data.repository.MovieRepositoryImpl
 import com.karel.movieapp.databinding.ActivityMainBinding
 import com.karel.movieapp.domain.usecase.*
 import com.karel.movieapp.presentation.detail.MovieDetailFragment
+
+private const val DEFAULT_ERROR_MESSAGE = "An error has occurred, please try again"
 
 class MovieListActivity : AppCompatActivity(), IViewMainActivity {
 
@@ -29,19 +33,22 @@ class MovieListActivity : AppCompatActivity(), IViewMainActivity {
         viewModel.onViewCreated()
     }
 
-    override fun onStop() {
-        viewModel.onStop()
-        super.onStop()
+    override fun onPause() {
+        viewModel.onPause()
+        super.onPause()
     }
 
     override fun addMoviesToView(movies: List<MovieListItemViewModel>) {
-        (binding.moviesView.adapter as? MovieAdapter)?.addItems(movies)
+        Log.d("scrolled", "isLastPage ${viewModel.isLastPage}")
+        (binding.moviesView.adapter as? MovieAdapter)?.addItems(movies, viewModel.isLastPage)
     }
 
     override fun clearMoviesFromView() {
     }
 
     override fun renderErrorView(error: String?) {
+        Snackbar.make(binding.moviesView, error ?: DEFAULT_ERROR_MESSAGE, Snackbar.LENGTH_LONG)
+            .show()
     }
 
     override fun hideErrorView() {
@@ -150,17 +157,3 @@ class MovieListActivity : AppCompatActivity(), IViewMainActivity {
     }
 }
 
-interface IViewMainActivity {
-
-    fun addMoviesToView(movies: List<MovieListItemViewModel>)
-
-    fun renderErrorView(error: String?)
-
-    fun hideErrorView()
-
-    fun renderLoadingView()
-
-    fun hideLoadingView()
-
-    fun clearMoviesFromView()
-}

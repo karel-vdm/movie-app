@@ -4,15 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.karel.movieapp.domain.model.MovieListEntity
-import com.karel.movieapp.domain.model.MovieListItemEntity
 import com.karel.movieapp.domain.usecase.*
 import com.karel.movieapp.presentation.widget.PagedViewModel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-
-private const val FIRST_PAGE_INDEX = 1
 
 class MovieListViewModel(
     private val useCaseGetMovies: UseCaseGetMovies,
@@ -41,19 +38,19 @@ class MovieListViewModel(
 
     fun onViewCreated() {
         if (!hasRestoredState) {
+            getSavedState()
             observeMovies()
-            observeSavedState()
         }
     }
 
-    fun onStop() {
+    fun onPause() {
         cacheCurrentState()
     }
 
     fun getMovies(searchTerm: String) {
         _searchTerm.value = searchTerm
         clearSavedState()
-        getMovies(FIRST_PAGE_INDEX)
+        getMovies(page)
     }
 
     override fun getMovies(page: Int) {
@@ -67,29 +64,18 @@ class MovieListViewModel(
                     setErrorState(exception)
                 }
                 .collect { result ->
-                    onPageLoaded(result.movies.size)
+                    if (result.isSuccess) {
+                        onPageLoaded(result)
+                        cacheCurrentState()
+                    }
                 }
         }
     }
 
-    private fun observeSavedState() {
+    private fun getSavedState() {
         viewModelScope.launch {
-            useCaseGetSavedState.getSavedState()
-                ?.onStart {
-                    setLoadingState()
-                }
-                ?.catch { exception ->
-                    setErrorState(exception)
-                }
-                ?.collect { result ->
-                    if (!hasRestoredState) {
-                        // TODO: find a more elegant solution
-                        // Flow is probably not the right solution in this case.
-                        // Due to time constraints I'm putting this hack in place
-                        hasRestoredState = true
-                        setRestoredState(result)
-                    }
-                }
+            val result = useCaseGetSavedState.getSavedState()
+            setRestoredState(result)
         }
     }
 
@@ -103,7 +89,11 @@ class MovieListViewModel(
                     setErrorState(exception)
                 }
                 ?.collect { result ->
-                    setMoviesLoadedState(result)
+                    if (result.isNotEmpty()) {
+                        _movies.value = result.map {
+                            TransformerMovieListItemViewModel.transform(it)
+                        }
+                    }
                 }
         }
     }
@@ -117,10 +107,8 @@ class MovieListViewModel(
     }
 
     private fun clearSavedState() {
+        resetPagingData()
         _movies.value = emptyList()
-        page = 1
-        currentPosition = 0
-        totalResultsLoaded = 0
         viewModelScope.launch {
             useCaseClearSavedState.clearSavedState()
         }
@@ -136,17 +124,16 @@ class MovieListViewModel(
         _loading.value = false
     }
 
-    private fun setRestoredState(result: MovieListEntity) {
-        _searchTerm.value = result.searchTerm
-        currentPosition = result.currentPosition
-        totalResultsLoaded = result.totalResultsLoaded
-        page = result.page
+    private fun setRestoredState(result: MovieListEntity?) {
+        _searchTerm.value = result?.searchTerm
+        if (result != null) {
+            page = result.pagingInfo.page
+            pageSize = result.pagingInfo.pageSize
+            totalResults = result.pagingInfo.totalResults
+            totalResultsLoaded = result.pagingInfo.totalResultsLoaded
+            totalPages = result.pagingInfo.totalPages
+            currentPosition = result.pagingInfo.currentPosition
+        }
     }
 
-    private fun setMoviesLoadedState(result: List<MovieListItemEntity>) {
-        _movies.value = result.map {
-            TransformerMovieListItemViewModel.transform(it)
-        }
-        _scrollPosition.value = currentPosition
-    }
 }

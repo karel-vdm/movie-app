@@ -4,13 +4,13 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.karel.movieapp.data.database.model.MovieDetailModel
-import com.karel.movieapp.data.database.model.MovieListModel
-import com.karel.movieapp.data.database.model.MovieListItemModel
+import com.karel.movieapp.data.database.model.MovieDetail
+import com.karel.movieapp.data.database.model.MovieList
+import com.karel.movieapp.data.database.model.MovieListItem
 
 @Database(
-    entities = [MovieListModel::class, MovieListItemModel::class, MovieDetailModel::class],
-    version = 12,
+    entities = [MovieList::class, MovieListItem::class, MovieDetail::class],
+    version = 2,
     exportSchema = false
 )
 abstract class MovieDatabase : RoomDatabase() {

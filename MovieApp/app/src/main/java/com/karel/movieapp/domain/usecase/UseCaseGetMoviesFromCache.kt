@@ -9,12 +9,10 @@ import kotlinx.coroutines.flow.map
 class UseCaseGetMoviesFromCache(
     private val repository: MovieRepository
 ) {
-
     fun getMovieListItems(): Flow<List<MovieListItemEntity>>? =
         repository.getMoviesFromCache()?.map { results ->
             results.map {
                 TransformerMovieListItemEntity.transform(it)
             }
         }
-
 }

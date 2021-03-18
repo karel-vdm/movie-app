@@ -11,6 +11,9 @@ data class GetMoviesResponseDto(
     val Search: List<MovieSearchDto>? = null,
 
     @SerializedName("totalResults")
-    val totalResults: String? = null
+    val totalResults: String? = null,
+
+    @SerializedName("Error")
+    val Error: String? = null
 )
 

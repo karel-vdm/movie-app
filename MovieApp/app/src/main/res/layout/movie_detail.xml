@@ -100,5 +100,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/movie_item_poster"
         app:layout_constraintTop_toBottomOf="@+id/movie_item_rating_icon" />
-    
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/content_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="movie_item_poster,movie_item_title,movie_item_year,movie_item_age_restriction,movie_item_plot,movie_item_rating,movie_item_rating_icon,movie_item_runtime"
+        tools:visibility="visible"/>
+
+    <include
+        android:id="@+id/shimmer_include"
+        layout="@layout/movie_detail_shimer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

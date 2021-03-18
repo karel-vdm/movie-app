@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -15,11 +16,13 @@ import com.karel.movieapp.data.api.MovieService
 import com.karel.movieapp.data.database.MovieDatabase
 import com.karel.movieapp.data.repository.MovieRepositoryImpl
 import com.karel.movieapp.databinding.MovieDetailBinding
+import com.karel.movieapp.databinding.MovieDetailShimerBinding
 import com.karel.movieapp.domain.usecase.UseCaseGetMovieById
 
 class MovieDetailFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: MovieDetailBinding
+    private lateinit var shimmerBinding: MovieDetailShimerBinding
 
     private lateinit var viewModel: MovieDetailViewModel
 
@@ -29,6 +32,7 @@ class MovieDetailFragment : BottomSheetDialogFragment() {
         bundle: Bundle?
     ): View {
         binding = MovieDetailBinding.inflate(layoutInflater, viewGroup, false)
+        shimmerBinding = binding.shimmerInclude
         return binding.root
     }
 
@@ -53,6 +57,11 @@ class MovieDetailFragment : BottomSheetDialogFragment() {
         viewModel.movie.observe(this, Observer { response ->
             renderMovieDetail(response)
         })
+        viewModel.loading.observe(this, Observer { value ->
+            shimmerBinding.root.isVisible = value
+        })
+
+
     }
 
     override fun onStart() {
@@ -61,9 +70,10 @@ class MovieDetailFragment : BottomSheetDialogFragment() {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    private fun renderMovieDetail(viewModel: MovieViewModel) {
+    private fun renderMovieDetail(viewModel: MovieDetailItemViewModel) {
         val context = context
         if (context != null) {
+            binding.contentGroup.isVisible = true
             binding.movieItemTitle.text = viewModel.title
             binding.movieItemYear.text = viewModel.year
             binding.movieItemAgeRestriction.text = viewModel.ageRestriction

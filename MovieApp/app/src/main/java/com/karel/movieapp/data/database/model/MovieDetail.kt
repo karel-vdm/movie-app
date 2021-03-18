@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "movie_detail")
-data class MovieDetailModel(
+data class MovieDetail(
 
     @PrimaryKey
     val id: String = String()

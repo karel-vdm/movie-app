@@ -1,6 +1,6 @@
 package com.karel.movieapp.presentation.detail
 
-data class MovieViewModel(
+data class MovieDetailItemViewModel(
     val id: String = String(),
     val title: String = String(),
     val poster: String = String(),

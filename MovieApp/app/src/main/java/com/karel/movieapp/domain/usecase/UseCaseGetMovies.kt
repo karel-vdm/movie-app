@@ -9,10 +9,8 @@ import kotlinx.coroutines.flow.map
 class UseCaseGetMovies(
     private val repository: MovieRepository
 ) {
-
     fun getMoviesBySearchTerm(searchTerm: String, page: Int): Flow<MovieListEntity> =
         repository.getMovies(searchTerm, page).map { response ->
             TransformerMovieListEntity.transform(response)
         }
-
 }

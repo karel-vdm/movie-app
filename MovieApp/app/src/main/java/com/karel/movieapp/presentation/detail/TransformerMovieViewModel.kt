@@ -4,7 +4,7 @@ import com.karel.movieapp.domain.model.MovieDetailEntity
 
 object TransformerMovieViewModel {
 
-    fun transform(entity: MovieDetailEntity) = MovieViewModel(
+    fun transform(entity: MovieDetailEntity) = MovieDetailItemViewModel(
         id = entity.id,
         title = entity.title,
         poster = entity.poster,

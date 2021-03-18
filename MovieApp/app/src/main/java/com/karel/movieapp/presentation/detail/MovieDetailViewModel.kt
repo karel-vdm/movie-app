@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.karel.movieapp.data.api.MovieService
-import com.karel.movieapp.data.repository.MovieRepositoryImpl
 import com.karel.movieapp.domain.usecase.UseCaseGetMovieById
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
@@ -22,8 +20,8 @@ class MovieDetailViewModel(
     private var _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> get() = _loading
 
-    private var _movie = MutableLiveData<MovieViewModel>()
-    val movie: LiveData<MovieViewModel> get() = _movie
+    private var _movie = MutableLiveData<MovieDetailItemViewModel>()
+    val movie: LiveData<MovieDetailItemViewModel> get() = _movie
 
     fun getMovieById(id: String) {
         viewModelScope.launch {

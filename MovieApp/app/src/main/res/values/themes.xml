@@ -23,7 +23,7 @@
 
     <style name="AppModalStyle"
         parent="Widget.Design.BottomSheet.Modal">
-        <item name="android:background">@drawable/rounded_rectangle</item>
+        <item name="android:background">@drawable/bottomsheet</item>
     </style>
 
     <style name="TitleText">
