@@ -1,74 +1,71 @@
 package com.karel.movieapp
 
-import android.icu.text.CaseMap
-import com.karel.movieapp.data.api.model.GetMovieDetailResponseDto
-import com.karel.movieapp.data.api.model.GetMoviesResponseDto
-import com.karel.movieapp.data.database.model.MovieList
-import com.karel.movieapp.data.database.model.MovieListItem
-import com.karel.movieapp.data.repository.MovieRepository
-import com.karel.movieapp.data.repository.MovieRepositoryImpl
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import com.karel.movieapp.domain.usecase.UseCaseGetMovieById
 import com.karel.movieapp.presentation.detail.MovieDetailViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import junit.framework.Assert.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
-import org.junit.Assert.*
-
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
+@ExperimentalCoroutinesApi
 class MovieDetailViewModelTest {
 
-    val sut = MovieDetailViewModel(
+    @get:Rule
+    var rule: TestRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val testCoroutineRule = TestCoroutineRule()
+
+    private val sut = MovieDetailViewModel(
         UseCaseGetMovieById(
-            repository = MovieRepositoryImpl
+            repository = MockMovieRepositoryImpl()
         )
     )
 
+    @ExperimentalCoroutinesApi
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
-    }
+    fun `given loading state, when get movie called, then update loading state`() =
+        runBlockingTest {
+            //given
+            sut.setLoading(true)
 
-    class MockMovieRepositoryImpl: MovieRepository{
-        override fun getMovies(searchTerm: String, page: Int): Flow<GetMoviesResponseDto> {
-            TODO("Not yet implemented")
+            //when
+            sut.getMovieById("1")
+
+            //then
+            assertEquals(false, sut.loading.getOrAwaitValue())
         }
-
-        override fun getMovieById(id: String): Flow<GetMovieDetailResponseDto> {
-            return flow {
-                emit(
-                    GetMovieDetailResponseDto(
-                        imdbID = 1,
-                        Title = "Test",
-
-                    )
-                )
-            }
-        }
-
-        override suspend fun getSavedState(): MovieList {
-            TODO("Not yet implemented")
-        }
-
-        override fun getMoviesFromCache(): Flow<List<MovieListItem>>? {
-            TODO("Not yet implemented")
-        }
-
-        override suspend fun saveCurrentState(movie: MovieList) {
-            TODO("Not yet implemented")
-        }
-
-        override suspend fun deleteMoviesFromCache() {
-            TODO("Not yet implemented")
-        }
-
-        override suspend fun clearSavedState() {
-            TODO("Not yet implemented")
-        }
-
-    }
 }
+
+fun <T> LiveData<T>.getOrAwaitValue(
+    time: Long = 2,
+    timeUnit: TimeUnit = TimeUnit.SECONDS
+): T {
+    var data: T? = null
+    val latch = CountDownLatch(1)
+    val observer = object : Observer<T> {
+        override fun onChanged(o: T?) {
+            data = o
+            latch.countDown()
+            this@getOrAwaitValue.removeObserver(this)
+        }
+    }
+
+    this.observeForever(observer)
+
+    if (!latch.await(time, timeUnit)) {
+        throw TimeoutException("value was not set")
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    return data as T
+}
+

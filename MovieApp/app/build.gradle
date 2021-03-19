@@ -50,6 +50,9 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation "io.mockk:mockk:1.10.6"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.4.3'
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
 
     //activity-ktx
     def activity_version = "1.2.0"

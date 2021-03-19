@@ -1,5 +1,6 @@
 package com.karel.movieapp.presentation.detail
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,6 +40,11 @@ class MovieDetailViewModel(
                     _loading.value = false
                 }
         }
+    }
+
+    @VisibleForTesting
+    fun setLoading(loading: Boolean) {
+        _loading.value = loading
     }
 
 }
