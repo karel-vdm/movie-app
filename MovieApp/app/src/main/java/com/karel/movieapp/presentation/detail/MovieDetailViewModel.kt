@@ -5,14 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.karel.movieapp.domain.usecase.UseCaseGetMovieById
+import com.karel.movieapp.domain.usecase.UseCaseGetMovieDetails
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
 class MovieDetailViewModel(
-    private val useCaseGetMovieById: UseCaseGetMovieById
+    private val useCaseGetMovieById: UseCaseGetMovieDetails
 ) : ViewModel() {
 
     private var _error = MutableLiveData<String>()

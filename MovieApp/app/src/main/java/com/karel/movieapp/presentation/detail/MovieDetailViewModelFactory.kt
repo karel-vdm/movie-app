@@ -3,12 +3,12 @@ package com.karel.movieapp.presentation.detail
 import androidx.lifecycle.*
 import com.karel.movieapp.domain.usecase.*
 
-class MovieDetailViewModelFactory(private val useCaseGetMovieById: UseCaseGetMovieById) :
+class MovieDetailViewModelFactory(private val useCaseGetMovieById: UseCaseGetMovieDetails) :
     ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return modelClass.getConstructor(
-            UseCaseGetMovieById::class.java
+            UseCaseGetMovieDetails::class.java
         ).newInstance(
             useCaseGetMovieById
         )

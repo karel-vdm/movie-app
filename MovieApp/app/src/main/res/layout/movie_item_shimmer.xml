@@ -64,6 +64,55 @@
             app:tint="@color/yellow_700"
             android:background="@drawable/shimmer_text"/>
 
+        <View
+            android:id="@+id/movie_item_poster2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintDimensionRatio="H,1:1.2"
+            app:layout_constraintEnd_toEndOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/movie_item_poster"
+            android:background="@drawable/shimmer_image"/>
+
+        <View
+            android:id="@+id/movie_item_title2"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/movie_item_poster2"
+            app:layout_constraintTop_toBottomOf="@+id/movie_item_poster"
+            android:background="@drawable/shimmer_text"/>
+
+        <View
+            android:id="@+id/movie_item_year2"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="64dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/movie_item_poster2"
+            app:layout_constraintTop_toBottomOf="@+id/movie_item_title2"
+            android:background="@drawable/shimmer_text"/>
+
+        <View
+            android:id="@+id/movie_item_rating_icon2"
+            android:layout_width="0dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="120dp"
+            android:src="@drawable/ic_star"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/movie_item_poster2"
+            app:layout_constraintTop_toBottomOf="@+id/movie_item_year2"
+            app:tint="@color/yellow_700"
+            android:background="@drawable/shimmer_text"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

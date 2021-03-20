@@ -17,13 +17,12 @@ import com.karel.movieapp.data.database.MovieDatabase
 import com.karel.movieapp.data.repository.MovieRepositoryImpl
 import com.karel.movieapp.databinding.MovieDetailBinding
 import com.karel.movieapp.databinding.MovieDetailShimerBinding
-import com.karel.movieapp.domain.usecase.UseCaseGetMovieById
+import com.karel.movieapp.domain.usecase.UseCaseGetMovieDetails
 
 class MovieDetailFragment : BottomSheetDialogFragment() {
 
     private lateinit var binding: MovieDetailBinding
     private lateinit var shimmerBinding: MovieDetailShimerBinding
-
     private lateinit var viewModel: MovieDetailViewModel
 
     override fun onCreateView(
@@ -39,9 +38,20 @@ class MovieDetailFragment : BottomSheetDialogFragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
+        createViewModel(context)
+        observeViewModel()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val bottomSheetBehavior = BottomSheetBehavior.from(requireView().parent as View)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    private fun createViewModel(context: Context) {
         val database = MovieDatabase.getDatabase(context)
         val viewModelFactory = MovieDetailViewModelFactory(
-            useCaseGetMovieById = UseCaseGetMovieById(
+            useCaseGetMovieById = UseCaseGetMovieDetails(
                 MovieRepositoryImpl(
                     MovieService.create(),
                     database.movieDao()
@@ -51,7 +61,9 @@ class MovieDetailFragment : BottomSheetDialogFragment() {
 
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(MovieDetailViewModel::class.java)
+    }
 
+    private fun observeViewModel() {
         val id = getMovieIdFromArgs()
         viewModel.getMovieById(id)
         viewModel.movie.observe(this, Observer { response ->
@@ -60,14 +72,6 @@ class MovieDetailFragment : BottomSheetDialogFragment() {
         viewModel.loading.observe(this, Observer { value ->
             shimmerBinding.root.isVisible = value
         })
-
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val bottomSheetBehavior = BottomSheetBehavior.from(requireView().parent as View)
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun renderMovieDetail(viewModel: MovieDetailItemViewModel) {

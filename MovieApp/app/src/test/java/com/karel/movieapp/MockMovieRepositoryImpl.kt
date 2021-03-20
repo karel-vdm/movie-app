@@ -2,7 +2,7 @@ package com.karel.movieapp
 
 import com.karel.movieapp.data.api.model.GetMovieDetailResponseDto
 import com.karel.movieapp.data.api.model.GetMoviesResponseDto
-import com.karel.movieapp.data.database.model.MovieList
+import com.karel.movieapp.data.database.model.MovieListState
 import com.karel.movieapp.data.database.model.MovieListItem
 import com.karel.movieapp.data.repository.MovieRepository
 import kotlinx.coroutines.flow.Flow
@@ -30,7 +30,7 @@ class MockMovieRepositoryImpl :
         }
     }
 
-    override suspend fun getSavedState(): MovieList {
+    override suspend fun getSavedState(): MovieListState {
         TODO("Not yet implemented")
     }
 
@@ -38,7 +38,7 @@ class MockMovieRepositoryImpl :
         TODO("Not yet implemented")
     }
 
-    override suspend fun saveCurrentState(movie: MovieList) {
+    override suspend fun saveCurrentState(movie: MovieListState) {
         TODO("Not yet implemented")
     }
 

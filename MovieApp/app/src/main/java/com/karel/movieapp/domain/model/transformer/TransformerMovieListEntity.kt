@@ -1,7 +1,7 @@
 package com.karel.movieapp.domain.model.transformer
 
 import com.karel.movieapp.data.api.model.GetMoviesResponseDto
-import com.karel.movieapp.data.database.model.MovieList
+import com.karel.movieapp.data.database.model.MovieListState
 import com.karel.movieapp.domain.model.MovieListEntity
 
 object TransformerMovieListEntity {
@@ -14,7 +14,7 @@ object TransformerMovieListEntity {
         } ?: emptyList()
     )
 
-    fun transform(entity: MovieListEntity) = MovieList(
+    fun transform(entity: MovieListEntity) = MovieListState(
         page = entity.pagingInfo.page,
         pageSize = entity.pagingInfo.pageSize,
         totalResults = entity.pagingInfo.totalResults,
@@ -23,7 +23,7 @@ object TransformerMovieListEntity {
         searchTerm = entity.searchTerm
     )
 
-    fun transform(model: MovieList) = MovieListEntity(
+    fun transform(model: MovieListState) = MovieListEntity(
         pagingInfo = TransformerPagingInfoEntity.transform(model),
         searchTerm = model.searchTerm
     )

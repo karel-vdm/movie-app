@@ -5,7 +5,7 @@ import com.karel.movieapp.data.api.model.GetMovieDetailResponseDto
 import com.karel.movieapp.data.api.model.GetMoviesResponseDto
 import com.karel.movieapp.data.database.MovieDao
 import com.karel.movieapp.data.database.model.MovieListItem
-import com.karel.movieapp.data.database.model.MovieList
+import com.karel.movieapp.data.database.model.MovieListState
 import com.karel.movieapp.domain.model.transformer.TransformerMovieListItemEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +22,7 @@ class MovieRepositoryImpl(
     override fun getMovies(searchTerm: String, page: Int): Flow<GetMoviesResponseDto> = flow {
         val result = movieService.getMovies(API_KEY, searchTerm, page)
         val movies = result.Search?.map {
-            TransformerMovieListItemEntity.transformDto(it)
+            TransformerMovieListItemEntity.transformToItem(it)
         } ?: emptyList()
         movieDao.addMovies(movies)
         emit(result)
@@ -34,15 +34,15 @@ class MovieRepositoryImpl(
     }.flowOn(Dispatchers.IO)
 
 
-    override suspend fun getSavedState(): MovieList {
-        return movieDao.getSavedState() ?: MovieList()
+    override suspend fun getSavedState(): MovieListState {
+        return movieDao.getSavedState() ?: MovieListState()
     }
 
     override fun getMoviesFromCache(): Flow<List<MovieListItem>>? {
         return movieDao.getMovies()
     }
 
-    override suspend fun saveCurrentState(movie: MovieList) {
+    override suspend fun saveCurrentState(movie: MovieListState) {
         movieDao.insert(movie)
     }
 

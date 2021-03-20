@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Movie App</string>
     <string name="movies_empty_state_text">No results, search for more movies.</string>
+    <string name="default_error_message">An error has occurred, please try again</string>
+    <string name="no_results_text">No results. Please refine your search query, or search for a movie, series or game</string>
 </resources>

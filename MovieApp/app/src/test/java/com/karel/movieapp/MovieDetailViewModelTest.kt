@@ -3,7 +3,7 @@ package com.karel.movieapp
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.karel.movieapp.domain.usecase.UseCaseGetMovieById
+import com.karel.movieapp.domain.usecase.UseCaseGetMovieDetails
 import com.karel.movieapp.presentation.detail.MovieDetailViewModel
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -25,7 +25,7 @@ class MovieDetailViewModelTest {
     val testCoroutineRule = TestCoroutineRule()
 
     private val sut = MovieDetailViewModel(
-        UseCaseGetMovieById(
+        UseCaseGetMovieDetails(
             repository = MockMovieRepositoryImpl()
         )
     )

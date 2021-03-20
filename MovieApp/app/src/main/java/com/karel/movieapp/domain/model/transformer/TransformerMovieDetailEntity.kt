@@ -3,7 +3,7 @@ package com.karel.movieapp.domain.model.transformer
 import com.karel.movieapp.data.api.model.GetMovieDetailResponseDto
 import com.karel.movieapp.domain.model.MovieDetailEntity
 
-object TransformerMovieEntity {
+object TransformerMovieDetailEntity {
 
     fun transform(dto: GetMovieDetailResponseDto) = MovieDetailEntity(
         id = dto.imdbID ?: String(),

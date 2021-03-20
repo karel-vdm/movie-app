@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.karel.movieapp.domain.model.MovieListEntity
 import com.karel.movieapp.domain.usecase.*
 import com.karel.movieapp.presentation.widget.PagedViewModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onStart
@@ -27,31 +28,14 @@ class MovieListViewModel(
     private var _error = MutableLiveData<String>()
     val error: LiveData<String> get() = _error
 
-    private var _loading = MutableLiveData<Boolean>()
-    val loading: LiveData<Boolean> get() = _loading
-
     private var _movies = MutableLiveData<List<MovieListItemViewModel>>()
     val movies: LiveData<List<MovieListItemViewModel>> get() = _movies
 
+    private var _isEmptyState = MutableLiveData<Boolean>()
+    val isEmptyState: LiveData<Boolean> get() = _isEmptyState
+
     private var _scrollPosition = MutableLiveData<Int>()
     val scrollPosition: LiveData<Int> get() = _scrollPosition
-
-    fun onViewCreated() {
-        if (!hasRestoredState) {
-            getSavedState()
-            observeMovies()
-        }
-    }
-
-    fun onPause() {
-        cacheCurrentState()
-    }
-
-    fun getMovies(searchTerm: String) {
-        _searchTerm.value = searchTerm
-        clearSavedState()
-        getMovies(page)
-    }
 
     override fun getMovies(page: Int) {
         viewModelScope.launch {
@@ -64,18 +48,34 @@ class MovieListViewModel(
                     setErrorState(exception)
                 }
                 .collect { result ->
-                    if (result.isSuccess) {
-                        onPageLoaded(result)
-                        cacheCurrentState()
-                    }
+                    onGetMoviesResult(result)
+                    cancel()
                 }
         }
+    }
+
+    fun getMovies(searchTerm: String) {
+        _searchTerm.value = searchTerm
+        clearSavedState()
+        getMovies(page)
+    }
+
+    fun onViewCreated() {
+        if (!hasRestoredState) {
+            getSavedState()
+            observeMovies()
+        }
+    }
+
+    fun onPause() {
+        cacheCurrentState()
     }
 
     private fun getSavedState() {
         viewModelScope.launch {
             val result = useCaseGetSavedState.getSavedState()
             setRestoredState(result)
+            cancel()
         }
     }
 
@@ -93,6 +93,9 @@ class MovieListViewModel(
                         _movies.value = result.map {
                             TransformerMovieListItemViewModel.transform(it)
                         }
+                    } else if (result.isEmpty() && movies.value.isNullOrEmpty()) {
+                        _isEmptyState.value = true
+                        _movies.value = emptyList()
                     }
                 }
         }
@@ -108,6 +111,7 @@ class MovieListViewModel(
 
     private fun clearSavedState() {
         resetPagingData()
+        _isEmptyState.value = false
         _movies.value = emptyList()
         viewModelScope.launch {
             useCaseClearSavedState.clearSavedState()
@@ -116,23 +120,35 @@ class MovieListViewModel(
 
     private fun setLoadingState() {
         _error.value = String()
-        _loading.value = true
+        _isEmptyState.value = false
     }
 
     private fun setErrorState(exception: Throwable) {
-        _error.value = exception.message ?: "error"
-        _loading.value = false
+        _isEmptyState.value = false
+        _error.value = exception.message ?: return
     }
 
     private fun setRestoredState(result: MovieListEntity?) {
-        _searchTerm.value = result?.searchTerm
         if (result != null) {
+            _searchTerm.value = result.searchTerm
+            _scrollPosition.value = result.pagingInfo.currentPosition
             page = result.pagingInfo.page
             pageSize = result.pagingInfo.pageSize
             totalResults = result.pagingInfo.totalResults
             totalResultsLoaded = result.pagingInfo.totalResultsLoaded
             totalPages = result.pagingInfo.totalPages
             currentPosition = result.pagingInfo.currentPosition
+        }
+    }
+
+    private fun onGetMoviesResult(result: MovieListEntity) {
+        if (_movies.value.isNullOrEmpty()) {
+            _isEmptyState.value = result.hasNoResults
+            _movies.value = emptyList()
+        }
+        if (result.isSuccess) {
+            onPageLoaded(result)
+            cacheCurrentState()
         }
     }
 

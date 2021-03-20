@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@id/search_layout" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/movies_view"
+        android:id="@+id/movie_list_movies"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -58,5 +58,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_layout" />
+
+    <include
+        android:id="@+id/movie_list_empty_state"
+        layout="@layout/movie_item_empty_state"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/movie_list_movies" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

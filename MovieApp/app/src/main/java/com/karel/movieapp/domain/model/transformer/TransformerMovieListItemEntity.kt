@@ -14,7 +14,7 @@ object TransformerMovieListItemEntity {
         year = dto.Year ?: String()
     )
 
-    fun transformDto(dto: MovieSearchDto) = MovieListItem(
+    fun transformToItem(dto: MovieSearchDto) = MovieListItem(
         id = dto.imdbID ?: String(),
         title = dto.Title ?: String(),
         poster = dto.Poster ?: String(),

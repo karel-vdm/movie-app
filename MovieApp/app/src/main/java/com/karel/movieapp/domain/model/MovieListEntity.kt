@@ -5,5 +5,10 @@ data class MovieListEntity(
     val searchTerm: String = String(),
     val pagingInfo: PagingInfoEntity = PagingInfoEntity(),
     val movies: List<MovieListItemEntity> = emptyList()
-)
+) {
+    val hasNoResults: Boolean
+        get() {
+            return movies.isEmpty()
+        }
+}
 

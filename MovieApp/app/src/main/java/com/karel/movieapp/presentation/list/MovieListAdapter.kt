@@ -47,12 +47,16 @@ class MovieAdapter(private val onClickListener: (String) -> Unit) :
         }
     }
 
-    fun addItems(itemsToAdd: List<MovieListItemViewModel>, isLastPage: Boolean) {
+    fun addItems(
+        itemsToAdd: List<MovieListItemViewModel>,
+        isLastPage: Boolean,
+        isEmptyState: Boolean
+    ) {
         val diffResult = DiffUtil.calculateDiff(DiffCallback(items, itemsToAdd))
         diffResult.dispatchUpdatesTo(this)
         items.clear()
         items.addAll(itemsToAdd)
-        if (!isLastPage) {
+        if (!isLastPage && !isEmptyState) {
             items.add(MovieListItemViewModel(isInShimmerState = true))
         }
     }

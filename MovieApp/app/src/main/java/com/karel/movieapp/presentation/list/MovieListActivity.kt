@@ -1,31 +1,31 @@
 package com.karel.movieapp.presentation.list
 
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.karel.movieapp.R
 import com.karel.movieapp.data.api.MovieService
 import com.karel.movieapp.data.database.MovieDatabase
 import com.karel.movieapp.data.repository.MovieRepositoryImpl
-import com.karel.movieapp.databinding.ActivityMainBinding
+import com.karel.movieapp.databinding.ActivityMovieListBinding
 import com.karel.movieapp.domain.usecase.*
 import com.karel.movieapp.presentation.detail.MovieDetailFragment
 
-private const val DEFAULT_ERROR_MESSAGE = "An error has occurred, please try again"
 
 class MovieListActivity : AppCompatActivity(), IViewMainActivity {
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityMovieListBinding
     private lateinit var viewModel: MovieListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMovieListBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
@@ -39,25 +39,27 @@ class MovieListActivity : AppCompatActivity(), IViewMainActivity {
     }
 
     override fun addMoviesToView(movies: List<MovieListItemViewModel>) {
-        Log.d("scrolled", "isLastPage ${viewModel.isLastPage}")
-        (binding.moviesView.adapter as? MovieAdapter)?.addItems(movies, viewModel.isLastPage)
-    }
-
-    override fun clearMoviesFromView() {
+        (binding.movieListMovies.adapter as? MovieAdapter)?.addItems(
+            movies,
+            viewModel.isLastPage,
+            viewModel.isEmptyState.value == true
+        )
     }
 
     override fun renderErrorView(error: String?) {
-        Snackbar.make(binding.moviesView, error ?: DEFAULT_ERROR_MESSAGE, Snackbar.LENGTH_LONG)
-            .show()
+        Snackbar.make(
+            binding.movieListMovies,
+            error ?: getString(R.string.default_error_message),
+            Snackbar.LENGTH_LONG
+        ).show()
     }
 
-    override fun hideErrorView() {
+    override fun renderEmptyState() {
+        binding.movieListEmptyState.emptyListText.isVisible = true
     }
 
-    override fun renderLoadingView() {
-    }
-
-    override fun hideLoadingView() {
+    override fun hideEmptyState() {
+        binding.movieListEmptyState.emptyListText.isVisible = false
     }
 
     private fun initializeView() {
@@ -65,23 +67,6 @@ class MovieListActivity : AppCompatActivity(), IViewMainActivity {
         initializeMoviesView()
         createViewModel()
         observeViewModel()
-    }
-
-    private fun initializeMoviesView() {
-        binding.moviesView.layoutManager = LinearLayoutManager(this)
-        binding.moviesView.adapter = MovieAdapter { id ->
-            MovieDetailFragment.show(supportFragmentManager, id)
-        }
-        binding.moviesView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                val layoutManager = recyclerView.layoutManager
-                if (layoutManager is LinearLayoutManager) {
-                    val currentPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
-                    viewModel.onScroll(currentPosition)
-                }
-            }
-        })
     }
 
     private fun initializeSearchView() {
@@ -93,6 +78,23 @@ class MovieListActivity : AppCompatActivity(), IViewMainActivity {
 
             override fun onQueryTextChange(newText: String): Boolean {
                 return false
+            }
+        })
+    }
+
+    private fun initializeMoviesView() {
+        binding.movieListMovies.layoutManager = LinearLayoutManager(this)
+        binding.movieListMovies.adapter = MovieAdapter { id ->
+            MovieDetailFragment.show(supportFragmentManager, id)
+        }
+        binding.movieListMovies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager
+                if (layoutManager is LinearLayoutManager) {
+                    val currentPosition = layoutManager.findFirstCompletelyVisibleItemPosition()
+                    viewModel.onScroll(currentPosition)
+                }
             }
         })
     }
@@ -134,16 +136,14 @@ class MovieListActivity : AppCompatActivity(), IViewMainActivity {
         viewModel.error.observe(this, Observer { value ->
             if (value.isNotEmpty()) {
                 renderErrorView(value)
-            } else {
-                hideErrorView()
             }
         })
 
-        viewModel.loading.observe(this, Observer { value ->
+        viewModel.isEmptyState.observe(this, Observer { value ->
             if (value) {
-                renderLoadingView()
+                renderEmptyState()
             } else {
-                hideLoadingView()
+                hideEmptyState()
             }
         })
 
@@ -152,7 +152,7 @@ class MovieListActivity : AppCompatActivity(), IViewMainActivity {
         })
 
         viewModel.scrollPosition.observe(this, Observer { value ->
-            binding.moviesView.scrollToPosition(value)
+            binding.movieListMovies.scrollToPosition(value)
         })
     }
 }

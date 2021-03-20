@@ -6,11 +6,7 @@ interface IViewMainActivity {
 
     fun renderErrorView(error: String?)
 
-    fun hideErrorView()
+    fun renderEmptyState()
 
-    fun renderLoadingView()
-
-    fun hideLoadingView()
-
-    fun clearMoviesFromView()
+    fun hideEmptyState()
 }
