@@ -17,3 +17,8 @@ Domain layer: The domain layer is responsible for busniss logic as well as any c
 Presentation layer: The presentation layer is responsible for handling the display of data as well as view rendering logic. The domain layer object is mapped to a presentation layer object (ViewModel). Any changes to data for display purposes should be handled in the presentation layer.
 
 ![CleanArchitecture](https://user-images.githubusercontent.com/80144326/111739735-37ecd900-888c-11eb-8c49-0f3024cdf5ba.jpg)
+
+Dependency injection: The app does make use of dependency injection(constructor) but not a depenency injection framework. If it was a production application I would make use of either dagger or hilt
+
+https://developer.android.com/jetpack/androidx/releases/hilt
+https://developer.android.com/training/dependency-injection/dagger-basics
