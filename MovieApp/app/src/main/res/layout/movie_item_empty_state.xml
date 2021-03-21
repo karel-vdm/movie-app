@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/emptyListText"
     style="@style/BodyText.Normal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:text="@string/no_results_text"
-    android:textAlignment="center" />
+    android:textAlignment="center"
+    android:visibility="gone"
+    tools:visibility="visible" />

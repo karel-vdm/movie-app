@@ -1,5 +1,7 @@
 package com.karel.movieapp.presentation.list
 
+import android.util.Log
+import androidx.core.view.isVisible
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -90,10 +92,12 @@ class MovieListViewModel(
                 }
                 ?.collect { result ->
                     if (result.isNotEmpty()) {
+                        Log.d("movieListEmptyState", "observeMovies result.isNotEmpty")
                         _movies.value = result.map {
                             TransformerMovieListItemViewModel.transform(it)
                         }
                     } else if (result.isEmpty() && movies.value.isNullOrEmpty()) {
+                        Log.d("movieListEmptyState", "observeMovies result.isEmpty movies.value.isNullOrEmpty")
                         _isEmptyState.value = true
                         _movies.value = emptyList()
                     }

@@ -1,30 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/motionLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/primary_dark"
-    tools:context=".presentation.list.MovieListActivity">
+    app:layoutDescription="@xml/motion_scene_collapsing_toolbar">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/search_view_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="@string/app_name" />
+    <TextView
+        android:id="@+id/movie_list_title"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:gravity="center"
+        android:text="@string/app_name"
+        android:textColor="@color/white" />
 
     <FrameLayout
-        android:id="@+id/search_layout"
-        android:layout_width="match_parent"
+        android:id="@+id/movie_list_search"
+        android:layout_width="0dp"
         android:layout_height="48dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_view_toolbar">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp">
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_view"
@@ -39,6 +36,7 @@
     </FrameLayout>
 
     <View
+        android:id="@+id/movie_list_background"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
@@ -47,7 +45,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/search_layout" />
+        app:layout_constraintTop_toBottomOf="@id/movie_list_search" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/movie_list_movies"
@@ -57,7 +55,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_layout" />
+        app:layout_constraintTop_toTopOf="@+id/movie_list_background" />
 
     <include
         android:id="@+id/movie_list_empty_state"
@@ -70,4 +68,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/movie_list_movies" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>
