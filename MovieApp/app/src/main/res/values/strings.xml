@@ -3,4 +3,7 @@
     <string name="movies_empty_state_text">No results, search for more movies.</string>
     <string name="default_error_message">An error has occurred, please try again</string>
     <string name="no_results_text">No results. Please refine your search query, or search for a movie, series or game</string>
+    <string name="search_hint_text">Search movies...</string>
+    <string name="movie_item_poster_description">Movie Poster</string>
+    <string name="movie_item_rating_icon_description">Rating</string>
 </resources>

@@ -1,8 +1,6 @@
 package com.karel.movieapp.presentation.list
 
 import android.os.Bundle
-import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -18,7 +16,6 @@ import com.karel.movieapp.data.repository.MovieRepositoryImpl
 import com.karel.movieapp.databinding.ActivityMovieListBinding
 import com.karel.movieapp.domain.usecase.*
 import com.karel.movieapp.presentation.detail.MovieDetailFragment
-
 
 class MovieListActivity : AppCompatActivity(), IViewMainActivity {
 
@@ -58,12 +55,10 @@ class MovieListActivity : AppCompatActivity(), IViewMainActivity {
 
     override fun renderEmptyState() {
         binding.movieListEmptyState.root.isVisible = true
-        Log.d("movieListEmptyState", "renderEmptyState ${binding.movieListEmptyState.emptyListText.isVisible}")
     }
 
     override fun hideEmptyState() {
         binding.movieListEmptyState.root.isVisible = false
-        Log.d("movieListEmptyState", "hideEmptyState ${binding.movieListEmptyState.emptyListText.isVisible}")
     }
 
     private fun initializeView() {

@@ -6,8 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.karel.movieapp.databinding.MovieItemBinding
 import com.karel.movieapp.databinding.MovieItemShimmerBinding
-import com.karel.movieapp.presentation.widget.ViewHolderShimmer
-
 
 private const val MOVIE = 0
 private const val SHIMMER = 1

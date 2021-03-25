@@ -1,6 +1,5 @@
 package com.karel.movieapp.presentation.widget
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.karel.movieapp.domain.model.MovieListEntity
 
@@ -19,12 +18,6 @@ abstract class PagedViewModel : ViewModel() {
 
     val isLastPage: Boolean
         get() {
-            Log.d("isLastPage", "Page $page")
-            Log.d("isLastPage", "currentPosition $currentPosition")
-            Log.d("isLastPage", "pageSize $pageSize")
-            Log.d("isLastPage", "totalResults $totalResults")
-            Log.d("isLastPage", "totalResultsLoaded $totalResultsLoaded")
-            Log.d("isLastPage", "totalPages $totalPages")
             return if (totalResults == 0) {
                 false
             } else {
@@ -43,7 +36,6 @@ abstract class PagedViewModel : ViewModel() {
     }
 
     protected fun resetPagingData() {
-        Log.d("isLastPage", "resetPagingData")
         page = FIRST_PAGE_INDEX
         pageSize = 0
         totalPages = 0
@@ -53,12 +45,6 @@ abstract class PagedViewModel : ViewModel() {
     }
 
     fun onScroll(currentPosition: Int) {
-        Log.d("scrolled", "Page $page")
-        Log.d("scrolled", "currentPosition $currentPosition")
-        Log.d("scrolled", "pageSize $pageSize")
-        Log.d("scrolled", "totalResults $totalResults")
-        Log.d("scrolled", "totalResultsLoaded $totalResultsLoaded")
-        Log.d("scrolled", "totalPages $totalPages")
         this.currentPosition = currentPosition
         if (shouldPage(currentPosition)) {
             loading = true

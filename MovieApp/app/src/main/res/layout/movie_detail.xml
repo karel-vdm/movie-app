@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="@dimen/margin_big">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -17,6 +17,7 @@
         android:id="@+id/movie_item_poster"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="@string/movie_item_poster_description"
         app:layout_constraintDimensionRatio="H,1:1.5"
         app:layout_constraintEnd_toEndOf="@id/guideline"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +28,7 @@
         style="@style/TitleText.Normal.Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/margin_big"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/movie_item_poster"
         app:layout_constraintTop_toTopOf="parent"
@@ -38,8 +39,8 @@
         style="@style/SubtitleText.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_medium"
         app:layout_constraintEnd_toStartOf="@+id/movie_item_age_restriction"
         app:layout_constraintStart_toEndOf="@+id/movie_item_poster"
         app:layout_constraintTop_toBottomOf="@+id/movie_item_title"
@@ -50,8 +51,8 @@
         style="@style/SubtitleText.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
         app:layout_constraintStart_toEndOf="@+id/movie_item_year"
         app:layout_constraintTop_toBottomOf="@+id/movie_item_title"
         tools:text="TV-PG" />
@@ -61,18 +62,19 @@
         style="@style/SubtitleText.Secondary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/margin_medium"
+        android:layout_marginTop="@dimen/margin_medium"
         app:layout_constraintStart_toEndOf="@+id/movie_item_age_restriction"
         app:layout_constraintTop_toBottomOf="@+id/movie_item_title"
         tools:text="24 min" />
 
     <ImageView
         android:id="@+id/movie_item_rating_icon"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="@dimen/margin_big"
+        android:layout_height="@dimen/margin_big"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:contentDescription="@string/movie_item_rating_icon_description"
         android:src="@drawable/ic_star"
         app:layout_constraintStart_toEndOf="@+id/movie_item_poster"
         app:layout_constraintTop_toBottomOf="@+id/movie_item_year"
@@ -83,8 +85,8 @@
         style="@style/SubtitleText.Secondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/margin_small"
+        android:layout_marginTop="@dimen/margin_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/movie_item_rating_icon"
         app:layout_constraintTop_toBottomOf="@+id/movie_item_year"
@@ -95,8 +97,8 @@
         style="@style/BodyText.Normal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/margin_big"
+        android:layout_marginTop="@dimen/margin_medium"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/movie_item_poster"
         app:layout_constraintTop_toBottomOf="@+id/movie_item_rating_icon" />
@@ -107,7 +109,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="movie_item_poster,movie_item_title,movie_item_year,movie_item_age_restriction,movie_item_plot,movie_item_rating,movie_item_rating_icon,movie_item_runtime"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <include
         android:id="@+id/shimmer_include"
